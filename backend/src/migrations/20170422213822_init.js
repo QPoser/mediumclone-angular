@@ -1,43 +1,23 @@
-exports.up = function(knex) {
+exports.up = function (knex) {
   return knex.schema
 
-    .createTable("users", function(table) {
-      table
-        .uuid("id")
-        .unique()
-        .primary()
-        .notNullable()
-      table
-        .string("email")
-        .unique()
-        .notNullable()
-      table
-        .string("username")
-        .unique()
-        .notNullable()
+    .createTable("users", function (table) {
+      table.uuid("id").unique().primary().notNullable()
+      table.string("email").unique().notNullable()
+      table.string("username").unique().notNullable()
       table.string("image").defaultTo("")
       table.text("bio").defaultTo("")
       table.string("password").notNullable()
       table.timestamps(true, true)
     })
 
-    .createTable("articles", function(table) {
-      table
-        .uuid("id")
-        .unique()
-        .primary()
-        .notNullable()
-      table
-        .string("slug")
-        .unique()
-        .notNullable()
+    .createTable("articles", function (table) {
+      table.uuid("id").unique().primary().notNullable()
+      table.string("slug").unique().notNullable()
       table.string("title").notNullable()
       table.text("body").notNullable()
       table.string("description").notNullable()
-      table
-        .integer("favorites_count")
-        .notNullable()
-        .defaultTo(0)
+      table.integer("favorites_count").notNullable().defaultTo(0)
       table
         .uuid("author")
         .notNullable()
@@ -46,12 +26,8 @@ exports.up = function(knex) {
       table.timestamps(true, true)
     })
 
-    .createTable("comments", function(table) {
-      table
-        .uuid("id")
-        .unique()
-        .primary()
-        .notNullable()
+    .createTable("comments", function (table) {
+      table.uuid("id").unique().primary().notNullable()
       table.text("body").notNullable()
       table
         .uuid("author")
@@ -66,12 +42,8 @@ exports.up = function(knex) {
       table.timestamps(true, true)
     })
 
-    .createTable("favorites", function(table) {
-      table
-        .uuid("id")
-        .unique()
-        .primary()
-        .notNullable()
+    .createTable("favorites", function (table) {
+      table.uuid("id").unique().primary().notNullable()
       table
         .uuid("user")
         .notNullable()
@@ -85,12 +57,8 @@ exports.up = function(knex) {
       table.timestamps(true, true)
     })
 
-    .createTable("followers", function(table) {
-      table
-        .uuid("id")
-        .unique()
-        .primary()
-        .notNullable()
+    .createTable("followers", function (table) {
+      table.uuid("id").unique().primary().notNullable()
       table
         .uuid("user")
         .notNullable()
@@ -105,41 +73,26 @@ exports.up = function(knex) {
       table.timestamps(true, true)
     })
 
-    .createTable("tags", function(table) {
-      table
-        .uuid("id")
-        .unique()
-        .primary()
-        .notNullable()
-      table
-        .string("name")
-        .unique()
-        .notNullable()
+    .createTable("tags", function (table) {
+      table.uuid("id").unique().primary().notNullable()
+      table.string("name").unique().notNullable()
       table.timestamps(true, true)
     })
 
-    .createTable("articles_tags", function(table) {
-      table
-        .uuid("id")
-        .unique()
-        .primary()
-        .notNullable()
+    .createTable("articles_tags", function (table) {
+      table.uuid("id").unique().primary().notNullable()
       table
         .uuid("article")
         .notNullable()
         .references("articles.id")
         .onDelete("CASCADE")
-      table
-        .uuid("tag")
-        .notNullable()
-        .references("tags.id")
-        .onDelete("CASCADE")
+      table.uuid("tag").notNullable().references("tags.id").onDelete("CASCADE")
       table.unique(["tag", "article"])
       table.timestamps(true, true)
     })
 }
 
-exports.down = function(knex) {
+exports.down = function (knex) {
   return knex.schema
     .dropTableIfExists("users")
     .dropTableIfExists("articles")

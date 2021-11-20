@@ -49,9 +49,7 @@ module.exports = {
 
     user.updatedAt = new Date().toISOString()
 
-    await db("users")
-      .where({ id: user.id })
-      .update(humps.decamelizeKeys(user))
+    await db("users").where({ id: user.id }).update(humps.decamelizeKeys(user))
 
     user = generateJWTforUser(user)
 
@@ -67,9 +65,7 @@ module.exports = {
       new ValidationError(["malformed request"], "", "email or password"),
     )
 
-    let user = await db("users")
-      .first()
-      .where({ email: body.user.email })
+    let user = await db("users").first().where({ email: body.user.email })
 
     ctx.assert(
       user,

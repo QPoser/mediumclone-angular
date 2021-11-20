@@ -19,7 +19,7 @@ module.exports = (ctx, next) => {
     query.skip = query.offset = (query.page - 1) * query.limit
   }
 
-  filters.forEach(f => {
+  filters.forEach((f) => {
     if (!query[f] || Array.isArray(query[f])) return
     if (query[f]) {
       query[f] = [query[f]]

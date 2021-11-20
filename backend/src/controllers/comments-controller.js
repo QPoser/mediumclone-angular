@@ -14,9 +14,7 @@ module.exports = {
   async byComment(comment, ctx, next) {
     ctx.assert(comment, 404)
 
-    comment = await db("comments")
-      .first()
-      .where({ id: comment })
+    comment = await db("comments").first().where({ id: comment })
 
     ctx.assert(comment, 404)
 
@@ -37,7 +35,7 @@ module.exports = {
       )
       .where({ article: article.id })
       .leftJoin("users", "comments.author", "users.id")
-      .leftJoin("followers", function() {
+      .leftJoin("followers", function () {
         this.on("users.id", "=", "followers.user").onIn("followers.follower", [
           user && user.id,
         ])
@@ -45,7 +43,7 @@ module.exports = {
 
     comments = joinJs
       .map(comments, relationsMaps, "commentMap", "comment_")
-      .map(c => {
+      .map((c) => {
         delete c.author.id
         c.author.following = Boolean(c.author.following)
         return c
@@ -78,9 +76,7 @@ module.exports = {
   async del(ctx) {
     const { comment } = ctx.params
 
-    await db("comments")
-      .del()
-      .where({ id: comment.id })
+    await db("comments").del().where({ id: comment.id })
 
     ctx.body = {}
   },

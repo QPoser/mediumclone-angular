@@ -17,9 +17,7 @@ module.exports = {
   async bySlug(slug, ctx, next) {
     ctx.assert(slug, 404)
 
-    const article = await db("articles")
-      .first()
-      .where({ slug })
+    const article = await db("articles").first().where({ slug })
 
     ctx.assert(article, 404)
 
@@ -32,9 +30,12 @@ module.exports = {
     if (tagsRelations && tagsRelations.length > 0) {
       tagList = await db("tags")
         .select()
-        .whereIn("id", tagsRelations.map(r => r.tag))
+        .whereIn(
+          "id",
+          tagsRelations.map((r) => r.tag),
+        )
 
-      tagList = tagList.map(t => t.name)
+      tagList = tagList.map((t) => t.name)
     }
 
     article.tagList = tagList
@@ -104,9 +105,7 @@ module.exports = {
     let countQuery = db("articles").count()
 
     if (author && author.length > 0) {
-      const subQuery = db("users")
-        .select("id")
-        .whereIn("username", author)
+      const subQuery = db("users").select("id").whereIn("username", author)
 
       articlesQuery = articlesQuery.andWhere("articles.author", "in", subQuery)
       countQuery = countQuery.andWhere("articles.author", "in", subQuery)
@@ -117,9 +116,7 @@ module.exports = {
         .select("article")
         .whereIn(
           "user",
-          db("users")
-            .select("id")
-            .whereIn("username", favorited),
+          db("users").select("id").whereIn("username", favorited),
         )
 
       articlesQuery = articlesQuery.andWhere("articles.id", "in", subQuery)
@@ -129,12 +126,7 @@ module.exports = {
     if (tag && tag.length > 0) {
       const subQuery = db("articles_tags")
         .select("article")
-        .whereIn(
-          "tag",
-          db("tags")
-            .select("id")
-            .whereIn("name", tag),
-        )
+        .whereIn("tag", db("tags").select("id").whereIn("name", tag))
 
       articlesQuery = articlesQuery.andWhere("articles.id", "in", subQuery)
       countQuery = countQuery.andWhere("articles.id", "in", subQuery)
@@ -144,13 +136,13 @@ module.exports = {
       .leftJoin("users", "articles.author", "users.id")
       .leftJoin("articles_tags", "articles.id", "articles_tags.article")
       .leftJoin("tags", "articles_tags.tag", "tags.id")
-      .leftJoin("favorites", function() {
+      .leftJoin("favorites", function () {
         this.on("articles.id", "=", "favorites.article").onIn(
           "favorites.user",
           [user && user.id],
         )
       })
-      .leftJoin("followers", function() {
+      .leftJoin("followers", function () {
         this.on("articles.author", "=", "followers.user").onIn(
           "followers.follower",
           [user && user.id],
@@ -161,9 +153,9 @@ module.exports = {
 
     articles = joinJs
       .map(articles, relationsMaps, "articleMap", "article_")
-      .map(a => {
+      .map((a) => {
         a.favorited = Boolean(a.favorited)
-        a.tagList = a.tagList.map(t => t.name)
+        a.tagList = a.tagList.map((t) => t.name)
         a.author.following = Boolean(a.author.following)
         delete a.author.id
         return a
@@ -195,8 +187,8 @@ module.exports = {
     if (article.tagList && article.tagList.length > 0) {
       tags = await Promise.all(
         article.tagList
-          .map(t => ({ id: uuid(), name: t }))
-          .map(t => ctx.app.schemas.tag.validate(t, opts)),
+          .map((t) => ({ id: uuid(), name: t }))
+          .map((t) => ctx.app.schemas.tag.validate(t, opts)),
       )
     }
 
@@ -231,9 +223,12 @@ module.exports = {
 
       tags = await db("tags")
         .select()
-        .whereIn("name", tags.map(t => t.name))
+        .whereIn(
+          "name",
+          tags.map((t) => t.name),
+        )
 
-      const relations = tags.map(t => ({
+      const relations = tags.map((t) => ({
         id: uuid(),
         tag: t.id,
         article: article.id,
@@ -313,9 +308,7 @@ module.exports = {
     }
 
     if (fields.tagList && fields.tagList.length === 0) {
-      await db("articles_tags")
-        .del()
-        .where({ article: article.id })
+      await db("articles_tags").del().where({ article: article.id })
     }
 
     if (fields.tagList && fields.tagList.length > 0) {
@@ -323,14 +316,12 @@ module.exports = {
         _.difference(article.tagList).length ||
         _.difference(fields.tagList).length
       ) {
-        await db("articles_tags")
-          .del()
-          .where({ article: article.id })
+        await db("articles_tags").del().where({ article: article.id })
 
         let tags = await Promise.all(
           newArticle.tagList
-            .map(t => ({ id: uuid(), name: t }))
-            .map(t => ctx.app.schemas.tag.validate(t, opts)),
+            .map((t) => ({ id: uuid(), name: t }))
+            .map((t) => ctx.app.schemas.tag.validate(t, opts)),
         )
 
         for (var i = 0; i < tags.length; i++) {
@@ -347,9 +338,12 @@ module.exports = {
 
         tags = await db("tags")
           .select()
-          .whereIn("name", tags.map(t => t.name))
+          .whereIn(
+            "name",
+            tags.map((t) => t.name),
+          )
 
-        const relations = tags.map(t => ({
+        const relations = tags.map((t) => ({
           id: uuid(),
           tag: t.id,
           article: article.id,
@@ -378,13 +372,9 @@ module.exports = {
         .del()
         .where({ user: ctx.state.user.id, article: article.id }),
 
-      db("articles_tags")
-        .del()
-        .where({ article: article.id }),
+      db("articles_tags").del().where({ article: article.id }),
 
-      db("articles")
-        .del()
-        .where({ id: article.id }),
+      db("articles").del().where({ id: article.id }),
     ])
 
     ctx.body = {}
@@ -415,23 +405,21 @@ module.exports = {
           .leftJoin("users", "articles.author", "users.id")
           .leftJoin("articles_tags", "articles.id", "articles_tags.article")
           .leftJoin("tags", "articles_tags.tag", "tags.id")
-          .leftJoin("favorites", function() {
+          .leftJoin("favorites", function () {
             this.on("articles.id", "=", "favorites.article").onIn(
               "favorites.user",
               [user && user.id],
             )
           }),
 
-        db("articles")
-          .count()
-          .whereIn("author", followedQuery),
+        db("articles").count().whereIn("author", followedQuery),
       ])
 
       articles = joinJs
         .map(articles, relationsMaps, "articleMap", "article_")
-        .map(a => {
+        .map((a) => {
           a.favorited = Boolean(a.favorited)
-          a.tagList = a.tagList.map(t => t.name)
+          a.tagList = a.tagList.map((t) => t.name)
           a.author.following = true
           delete a.author.id
           return a

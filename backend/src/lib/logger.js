@@ -5,13 +5,13 @@ const os = require("os")
 const miss = require("mississippi")
 
 const serializers = {
-  req: req => {
+  req: (req) => {
     return pino.stdSerializers.req(req)
   },
   res: pino.stdSerializers.res,
   err: pino.stdSerializers.err,
   error: pino.stdSerializers.err,
-  user: user => ({
+  user: (user) => ({
     id: user._id,
   }),
 }

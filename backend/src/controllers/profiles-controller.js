@@ -17,7 +17,7 @@ module.exports = {
         "followers.id as profile_following",
       )
       .where({ username })
-      .leftJoin("followers", function() {
+      .leftJoin("followers", function () {
         this.on("users.id", "=", "followers.user").onIn("followers.follower", [
           user && user.id,
         ])
@@ -86,9 +86,7 @@ module.exports = {
         return
       }
 
-      await db("followers")
-        .where({ user: profile.id, follower: user.id })
-        .del()
+      await db("followers").where({ user: profile.id, follower: user.id }).del()
 
       profile.following = false
 

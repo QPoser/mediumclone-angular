@@ -20,7 +20,7 @@ async function main() {
     logger.debug(`Server is listening on: ${host}:${port}`)
 
     await Promise.race([
-      ...["SIGINT", "SIGHUP", "SIGTERM"].map(s =>
+      ...["SIGINT", "SIGHUP", "SIGTERM"].map((s) =>
         pEvent(process, s, {
           rejectionEvents: ["uncaughtException", "unhandledRejection"],
         }),

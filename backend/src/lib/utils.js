@@ -17,7 +17,7 @@ function generateJWTforUser(user = {}) {
 }
 
 function getSelect(table, prefix, fields) {
-  return fields.map(f => `${table}.${f} as ${prefix}_${f}`)
+  return fields.map((f) => `${table}.${f} as ${prefix}_${f}`)
 }
 
 exports.generateJWTforUser = generateJWTforUser

@@ -71,7 +71,7 @@ function formatValidationError(err) {
   }
   if (err.inner && err.inner.length > 0) {
     err.inner
-      .map(err => formatValidationError(err))
+      .map((err) => formatValidationError(err))
       .reduce((prev, curr) => Object.assign(prev, curr), result)
   }
   return result

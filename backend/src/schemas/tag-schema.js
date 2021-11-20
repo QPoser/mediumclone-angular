@@ -8,14 +8,10 @@ const tagSchema = yup
     id: yup.string().test({
       name: "id",
       message: "${path} must be uuid", // eslint-disable-line
-      test: value => (value ? isUUID(value) : true),
+      test: (value) => (value ? isUUID(value) : true),
     }),
 
-    name: yup
-      .string()
-      .required()
-      .max(30)
-      .trim(),
+    name: yup.string().required().max(30).trim(),
   })
   .noUnknown()
   .concat(timeStampSchema)

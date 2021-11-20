@@ -10,10 +10,10 @@ const timeStampsSchema = yup
       .test({
         name: "createdAt",
         message: "${path} must be valid ISO8601 date", // eslint-disable-line
-        test: value =>
+        test: (value) =>
           value ? isISO8601(new Date(value).toISOString()) : true,
       })
-      .transform(function(value) {
+      .transform(function (value) {
         return this.isType(value) && value !== null
           ? new Date(value).toISOString()
           : value
@@ -26,10 +26,10 @@ const timeStampsSchema = yup
       .test({
         name: "updatedAt",
         message: "${path} must be valid ISO8601 date", // eslint-disable-line
-        test: value =>
+        test: (value) =>
           value ? isISO8601(new Date(value).toISOString()) : true,
       })
-      .transform(function(value) {
+      .transform(function (value) {
         return this.isType(value) && value !== null
           ? new Date(value).toISOString()
           : value
