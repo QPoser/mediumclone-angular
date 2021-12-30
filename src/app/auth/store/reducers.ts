@@ -4,18 +4,12 @@ import {
   getCurrentUserFailureAction,
   getCurrentUserSuccessAction,
 } from 'src/app/auth/store/actions/getCurrentUser.action';
-import {
-  loginAction,
-  loginFailureAction,
-  loginSuccessAction,
-} from 'src/app/auth/store/actions/login.action';
+import {loginAction, loginFailureAction, loginSuccessAction} from 'src/app/auth/store/actions/login.action';
+import {logoutAction} from 'src/app/auth/store/actions/sync.action';
+import {updateCurrentUserSuccessAction} from 'src/app/auth/store/actions/updateCurrentUser.action';
 
 import {AuthStateInterface} from '../types/authState.interface';
-import {
-  registerAction,
-  registerFailureAction,
-  registerSuccessAction,
-} from './actions/register.action';
+import {registerAction, registerFailureAction, registerSuccessAction} from './actions/register.action';
 
 const initialState: AuthStateInterface = {
   isSubmitting: false,
@@ -101,6 +95,20 @@ const authReducer = createReducer(
       isLoading: false,
       isLoggedIn: false,
       currentUser: null,
+    })
+  ),
+  on(
+    updateCurrentUserSuccessAction,
+    (state, action): AuthStateInterface => ({
+      ...state,
+      currentUser: action.currentUser,
+    })
+  ),
+  on(
+    logoutAction,
+    (): AuthStateInterface => ({
+      ...initialState,
+      isLoggedIn: false,
     })
   )
 );
