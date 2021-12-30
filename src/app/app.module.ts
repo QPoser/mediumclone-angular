@@ -12,10 +12,12 @@ import {AuthModule} from 'src/app/auth/auth.module';
 import {CreateArticleModule} from 'src/app/createArticle/createArticle.module';
 import {EditArticleModule} from 'src/app/editArticle/editArticle.module';
 import {GlobalFeedModule} from 'src/app/globalFeed/globalFeed.module';
+import {SettingsModule} from 'src/app/settings/settings.module';
 import {TopBarModule} from 'src/app/shared/modules/topBar/topBar.module';
 import {AuthInterceptor} from 'src/app/shared/services/authInterceptor.service';
 import {PersistenceService} from 'src/app/shared/services/persistence.service';
 import {TagFeedModule} from 'src/app/tagFeed/tagFeed.module';
+import {UserProfileModule} from 'src/app/userProfile/userProfile.module';
 import {YourFeedModule} from 'src/app/yourFeed/yourFeed.module';
 import {environment} from 'src/environments/environment';
 
@@ -40,6 +42,8 @@ import {environment} from 'src/environments/environment';
     CreateArticleModule,
     EditArticleModule,
     ArticleModule,
+    SettingsModule,
+    UserProfileModule,
   ],
   providers: [
     PersistenceService,
