@@ -7,7 +7,10 @@ import {StoreModule} from '@ngrx/store';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {AppRoutingModule} from 'src/app/app-routing.module';
 import {AppComponent} from 'src/app/app.component';
+import {ArticleModule} from 'src/app/article/article.module';
 import {AuthModule} from 'src/app/auth/auth.module';
+import {CreateArticleModule} from 'src/app/createArticle/createArticle.module';
+import {EditArticleModule} from 'src/app/editArticle/editArticle.module';
 import {GlobalFeedModule} from 'src/app/globalFeed/globalFeed.module';
 import {TopBarModule} from 'src/app/shared/modules/topBar/topBar.module';
 import {AuthInterceptor} from 'src/app/shared/services/authInterceptor.service';
@@ -34,6 +37,9 @@ import {environment} from 'src/environments/environment';
     GlobalFeedModule,
     YourFeedModule,
     TagFeedModule,
+    CreateArticleModule,
+    EditArticleModule,
+    ArticleModule,
   ],
   providers: [
     PersistenceService,
