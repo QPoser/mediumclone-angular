@@ -50,7 +50,7 @@ export class FeedComponent implements OnInit, OnDestroy, OnChanges {
     this.queryParamsSubscription.unsubscribe();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges): void {
     const apiUrlProps = changes['apiUrlProps'];
     const isApiUrlChanged =
       !apiUrlProps.firstChange &&
